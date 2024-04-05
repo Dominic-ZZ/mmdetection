@@ -6,7 +6,11 @@ custom_imports = dict(
 # model settings
 num_dec_layer = 6
 loss_lambda = 2.0
-num_classes = 80
+# num_classes = 80
+num_classes = 5
+
+data_root = 'data/animal/'
+dataset_type = 'CocoDataset'
 
 image_size = (1024, 1024)
 batch_augments = [
@@ -301,11 +305,17 @@ train_pipeline = [
 ]
 
 train_dataloader = dict(
+    batch_size=1,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
         pipeline=train_pipeline,
         dataset=dict(
-            filter_cfg=dict(filter_empty_gt=False), pipeline=load_pipeline)))
+            filter_cfg=dict(filter_empty_gt=False),
+            pipeline=load_pipeline,
+            data_root=data_root,
+            ann_file='annotations/animal_train_annotations_coco.json',
+            data_prefix=dict(img='train/'),
+            )))
 
 # follow ViTDet
 test_pipeline = [
@@ -319,7 +329,21 @@ test_pipeline = [
                    'scale_factor'))
 ]
 
-val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
+# val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
+# test_dataloader = val_dataloader
+val_dataloader = dict(
+    batch_size=1,
+    # num_workers=2,
+    # persistent_workers=True,
+    # drop_last=False,
+    sampler=dict(type='DefaultSampler', shuffle=False),
+    dataset=dict(
+        type=dataset_type,
+        data_root=data_root,
+        ann_file='annotations/animal_valid_annotations_coco.json',
+        data_prefix=dict(img='valid/'),
+        test_mode=True,
+        pipeline=test_pipeline))
 test_dataloader = val_dataloader
 
 optim_wrapper = dict(
@@ -329,7 +353,10 @@ optim_wrapper = dict(
     clip_grad=dict(max_norm=0.1, norm_type=2),
     paramwise_cfg=dict(custom_keys={'backbone': dict(lr_mult=0.1)}))
 
-val_evaluator = dict(metric='bbox')
+val_evaluator = dict(
+    metric='bbox',
+    ann_file=data_root + 'annotations/animal_valid_annotations_coco.json',
+    )
 test_evaluator = val_evaluator
 
 max_epochs = 12
