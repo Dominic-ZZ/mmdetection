@@ -10,7 +10,8 @@ image_size = 512
 batch_augments = [
     dict(type='BatchFixedSizePad', size=(image_size, image_size))
 ]
-dataset_type = 'CocoDataset'
+dataset_type = 'AnimalDataset'
+data_root = 'data/animal2/'
 evalute_type = 'CocoMetric'
 norm_cfg = dict(type='SyncBN', requires_grad=True, eps=1e-3, momentum=0.01)
 checkpoint = 'https://download.openmmlab.com/mmclassification/v0/efficientnet/efficientnet-b0_3rdparty_8xb32-aa-advprop_in1k_20220119-26434485.pth'  # noqa
@@ -118,11 +119,24 @@ test_pipeline = [
 train_dataloader = dict(
     batch_size=16,
     num_workers=8,
-    dataset=dict(type=dataset_type, pipeline=train_pipeline))
-val_dataloader = dict(dataset=dict(type=dataset_type, pipeline=test_pipeline))
+    dataset=dict(
+        type=dataset_type, 
+        pipeline=train_pipeline,
+        data_root=data_root,
+        ann_file='annotations/animal_train_annotations_coco.json',
+        data_prefix=dict(img='train/'),
+        ))
+val_dataloader = dict(
+    dataset=dict(
+        type=dataset_type, 
+        pipeline=test_pipeline,
+        data_root=data_root,
+        ann_file='annotations/animal_valid_annotations_coco.json',
+        data_prefix=dict(img='valid/'),
+        ))
 test_dataloader = val_dataloader
 
-val_evaluator = dict(type=evalute_type)
+val_evaluator = dict(type=evalute_type, ann_file=data_root + 'annotations/animal_valid_annotations_coco.json')
 test_evaluator = val_evaluator
 
 optim_wrapper = dict(

@@ -1,4 +1,4 @@
-# 统计coco格式数据集的类别
+# 统计coco格式数据集的类别数量
 
 from pycocotools.coco import COCO
  
