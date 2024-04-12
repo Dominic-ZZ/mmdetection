@@ -2,11 +2,11 @@
 
 from pycocotools.coco import COCO
  
-dataDir='./COCO'
-dataType='val2017'
-#dataType='train2017'
+# dataDir='./COCO'
+# dataType='val2017'
+# dataType='train2017'
 # annFile='{}/annotations/instances_{}.json'.format(dataDir, dataType)
-annFile='/workspace/mmdetection/data/animal/annotations/animal_train_annotations_coco.json'
+annFile='/workspace/mmdetection/data/animal3/annotations/train_annotations_coco.json'
 
 # initialize COCO api for instance annotations
 coco=COCO(annFile)
