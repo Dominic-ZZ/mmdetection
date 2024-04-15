@@ -387,8 +387,7 @@ class OverwatchDataset(BaseDetDataset):
 
     METAINFO = {
         'classes':
-        ('SOLDIER-76', 'MEI', 'ROADHOG', 'ZARYA', 'BASTION', 'kill-sign', 'ZENYATA', 'SOMBRA', 'REAPER',
-        'TORBJORN', 'LUCIO', 'CASSIDY', 'ANA', 'TORBJRON'),
+        ('person', 'ANA', 'BASTION', 'CASSIDY', 'LUCIO', 'MEI', 'REAPER', 'ROADHOG', 'SOLDIER-76', 'SOMBRA', 'TORBJORN', 'TORBJRON', 'ZARYA', 'ZENYATA', 'kill-sign'),
         # palette is a list of color tuples, which is used for visualization.
         'palette':
         [(220, 20, 60), (119, 11, 32), (0, 0, 142), (0, 0, 230), (106, 0, 228),

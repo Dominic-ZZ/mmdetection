@@ -8,7 +8,7 @@ custom_imports = dict(
 
 # image_size = 512
 image_size = 640
-num_classes = 14
+num_classes = 15
 batch_augments = [
     dict(type='BatchFixedSizePad', size=(image_size, image_size))
 ]
@@ -119,12 +119,11 @@ test_pipeline = [
 ]
 
 metainfo = {
-    'classes': ('SOLDIER-76', 'MEI', 'ROADHOG', 'ZARYA', 'BASTION', 'kill-sign', 'ZENYATA', 'SOMBRA', 'REAPER',
-        'TORBJORN', 'LUCIO', 'CASSIDY', 'ANA', 'TORBJRON'),
+    'classes': ('person', 'ANA', 'BASTION', 'CASSIDY', 'LUCIO', 'MEI', 'REAPER', 'ROADHOG', 'SOLDIER-76', 'SOMBRA', 'TORBJORN', 'TORBJRON', 'ZARYA', 'ZENYATA', 'kill-sign'),
     'palette': [
         (220, 20, 60), (119, 11, 32), (0, 0, 142), (0, 0, 230), (106, 0, 228),
          (0, 60, 100), (0, 80, 100), (0, 0, 70), (0, 0, 192), (250, 170, 30),
-         (100, 170, 30), (220, 220, 0), (175, 116, 175), (250, 0, 30)
+         (100, 170, 30), (220, 220, 0), (175, 116, 175), (250, 0, 30), (165, 42, 42)
     ]
 }
 
