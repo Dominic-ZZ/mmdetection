@@ -6,12 +6,14 @@ _base_ = [
 custom_imports = dict(
     imports=['projects.EfficientDet.efficientdet'], allow_failed_imports=False)
 
-image_size = 512
+# image_size = 512
+image_size = 640
+num_classes = 14
 batch_augments = [
     dict(type='BatchFixedSizePad', size=(image_size, image_size))
 ]
-dataset_type = 'AnimalDataset'
-data_root = 'data/animal2/'
+dataset_type = 'OverwatchDataset' #workspace/mmdetection/mmdet/datasets/coco.py
+data_root = 'data/overwatch2/'
 evalute_type = 'CocoMetric'
 norm_cfg = dict(type='SyncBN', requires_grad=True, eps=1e-3, momentum=0.01)
 checkpoint = 'https://download.openmmlab.com/mmclassification/v0/efficientnet/efficientnet-b0_3rdparty_8xb32-aa-advprop_in1k_20220119-26434485.pth'  # noqa
@@ -44,7 +46,7 @@ model = dict(
         norm_cfg=norm_cfg),
     bbox_head=dict(
         type='EfficientDetSepBNHead',
-        num_classes=80,
+        num_classes=num_classes,
         num_ins=5,
         in_channels=64,
         feat_channels=64,
@@ -116,27 +118,40 @@ test_pipeline = [
                    'scale_factor'))
 ]
 
+metainfo = {
+    'classes': ('SOLDIER-76', 'MEI', 'ROADHOG', 'ZARYA', 'BASTION', 'kill-sign', 'ZENYATA', 'SOMBRA', 'REAPER',
+        'TORBJORN', 'LUCIO', 'CASSIDY', 'ANA', 'TORBJRON'),
+    'palette': [
+        (220, 20, 60), (119, 11, 32), (0, 0, 142), (0, 0, 230), (106, 0, 228),
+         (0, 60, 100), (0, 80, 100), (0, 0, 70), (0, 0, 192), (250, 170, 30),
+         (100, 170, 30), (220, 220, 0), (175, 116, 175), (250, 0, 30)
+    ]
+}
+
 train_dataloader = dict(
     batch_size=16,
     num_workers=8,
+    persistent_workers=True,
     dataset=dict(
-        type=dataset_type, 
+        type=dataset_type,
+        metainfo=metainfo,
         pipeline=train_pipeline,
         data_root=data_root,
-        ann_file='annotations/animal_train_annotations_coco.json',
+        ann_file='annotations/train_annotations.coco.json',
         data_prefix=dict(img='train/'),
         ))
 val_dataloader = dict(
     dataset=dict(
         type=dataset_type, 
+        metainfo=metainfo, 
         pipeline=test_pipeline,
         data_root=data_root,
-        ann_file='annotations/animal_valid_annotations_coco.json',
+        ann_file='annotations/valid_annotations.coco.json',
         data_prefix=dict(img='valid/'),
         ))
 test_dataloader = val_dataloader
 
-val_evaluator = dict(type=evalute_type, ann_file=data_root + 'annotations/animal_valid_annotations_coco.json')
+val_evaluator = dict(type=evalute_type, ann_file=data_root + 'annotations/valid_annotations.coco.json')
 test_evaluator = val_evaluator
 
 optim_wrapper = dict(
@@ -167,7 +182,7 @@ vis_backends = [
 visualizer = dict(
     type='DetLocalVisualizer', vis_backends=vis_backends, name='visualizer')
 
-default_hooks = dict(checkpoint=dict(type='CheckpointHook', interval=15))
+default_hooks = dict(checkpoint=dict(type='CheckpointHook', interval=5, save_best='auto'))
 custom_hooks = [
     dict(
         type='EMAHook',

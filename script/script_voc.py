@@ -259,7 +259,7 @@ def remove_unmatched_data(image_folder, annotation_folder):
 
 
 if __name__ == "__main__":
-    dataset_path = r"/workspace/mmdetection/data/drug/annotations"
+    dataset_path = r"/workspace/mmdetection/data/overwatch2/annotations"
     # image_folder="/workspace/mmdetection/data/drug/img"
     # annotation_folder="/workspace/mmdetection/data/drug/annotations"
 
