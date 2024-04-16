@@ -103,14 +103,14 @@ train_pipeline = [
         type='RandomResize',
         scale=(image_size, image_size),
         ratio_range=(0.1, 2.0),
-        keep_ratio=True),
+        keep_ratio=False),
     dict(type='RandomCrop', crop_size=(image_size, image_size)),
     dict(type='RandomFlip', prob=0.5),
     dict(type='PackDetInputs')
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile', backend_args={{_base_.backend_args}}),
-    dict(type='Resize', scale=(image_size, image_size), keep_ratio=True),
+    dict(type='Resize', scale=(image_size, image_size), keep_ratio=False),
     dict(type='LoadAnnotations', with_bbox=True),
     dict(
         type='PackDetInputs',
@@ -172,7 +172,7 @@ param_scheduler = [
         by_epoch=True,
         convert_to_iter_based=True)
 ]
-train_cfg = dict(max_epochs=max_epochs, val_interval=1)
+train_cfg = dict(max_epochs=max_epochs, val_interval=5)
 
 vis_backends = [
     dict(type='LocalVisBackend'),
